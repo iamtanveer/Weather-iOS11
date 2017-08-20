@@ -7,20 +7,21 @@
 //
 
 import UIKit
+import CoreLocation
+//step 1 is to add this ^
 
-
-class WeatherViewController: UIViewController {
+//step 2 is to add CLLocationManagerDelegate
+class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
-    //Constants
     let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
-    let APP_ID = "e72ca729af228beabd5d20e3b7749713"
+//    let APP_ID = "e72ca729af228beabd5d20e3b7749713"
+    let APP_ID = "d25aff760d8458d0298b11c835c23f7b"
     
 
-    //TODO: Declare instance variables here
-    
+//step 3 -> Create an object of CLLocationManager type
+    let locationManager = CLLocationManager()
 
     
-    //Pre-linked IBOutlets
     @IBOutlet weak var weatherIcon: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -30,9 +31,12 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         
         
-        //TODO:Set up the location manager here.
-    
-        
+//step 4 -> Set up the location manager here.
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+    //authorization pop-up requesting location
+        locationManager.requestWhenInUseAuthorization()
+
         
     }
     
