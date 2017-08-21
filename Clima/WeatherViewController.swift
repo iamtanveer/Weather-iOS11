@@ -36,6 +36,11 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
     //authorization pop-up requesting location
         locationManager.requestWhenInUseAuthorization()
+//step 5 -> setup the Info.plist
+        
+//step 6 -> start updating location
+// this is an ASYNCHRONOUS METHOD, RUNS IN THE BACKGROUND. WOULD FREEZE IF NOT.
+        locationManager.startUpdatingLocation()
 
         
     }
@@ -79,11 +84,20 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     
     //Write the didUpdateLocations method here:
-    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations[locations.count - 1]
+        if location.horizontalAccuracy > 0{
+            locationManager.startUpdatingLocation()
+            print("Longitude: \(location.coordinate.longitude) Latitude: \(location.coordinate.latitude)")
+        }
+    }
     
     
     //Write the didFailWithError method here:
-    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
+        cityLabel.text = "Location Unavailable"
+    }
     
     
 
