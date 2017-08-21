@@ -16,11 +16,11 @@ import SwiftyJSON
 class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
-//    let APP_ID = "e72ca729af228beabd5d20e3b7749713"
+    //    let APP_ID = "e72ca729af228beabd5d20e3b7749713"
     let APP_ID = "d25aff760d8458d0298b11c835c23f7b"
     
-
-//step 3 -> Create an object of CLLocationManager type
+    
+    //step 3 -> Create an object of CLLocationManager type
     let locationManager = CLLocationManager()
     
     let weatherDataModel = WeatherDataModel()
@@ -28,23 +28,23 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var weatherIcon: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
-//step 4 -> Set up the location manager here.
+        //step 4 -> Set up the location manager here.
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-    //authorization pop-up requesting location
+        //authorization pop-up requesting location
         locationManager.requestWhenInUseAuthorization()
-//step 5 -> setup the Info.plist
+        //step 5 -> setup the Info.plist
         
-//step 6 -> start updating location
-// this is an ASYNCHRONOUS METHOD, RUNS IN THE BACKGROUND. WOULD FREEZE IF NOT HAD BEEN ASYNC.
+        //step 6 -> start updating location
+        // this is an ASYNCHRONOUS METHOD, RUNS IN THE BACKGROUND. WOULD FREEZE IF NOT HAD BEEN ASYNC.
         locationManager.startUpdatingLocation()
-
+        
         
     }
     
@@ -80,16 +80,25 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //MARK: - JSON Parsing
     /***************************************************************/
-   
+    
     
     //updateWeatherData method here:
     func updateWeatherData(json: JSON){
-        let tempResult = json["main"]["temp"].double
-        weatherDataModel.temperature = Int(tempResult! - 273.15)
-        weatherDataModel.city = json["name"].stringValue
-        weatherDataModel.condition = json["weather"][0]["id"].intValue
+        
+        if let tempResult = json["main"]["temp"].double {
+            
+            weatherDataModel.temperature = Int(tempResult - 273.15)
+            
+            weatherDataModel.city = json["name"].stringValue
+            
+            weatherDataModel.condition = json["weather"][0]["id"].intValue
+            
+            weatherDataModel.weatherIconName = weatherDataModel.updateWeatherIcon(condition: weatherDataModel.condition)
+        }else{
+            cityLabel.text = "Weather unavailable"
+        }
     }
-
+    
     
     
     
@@ -113,17 +122,17 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         let location = locations[locations.count - 1]
         if location.horizontalAccuracy > 0{
             locationManager.stopUpdatingLocation()
-//uncomment the line below if updating location is taking time to stop ie printing infinitely
-//locationManager.delegate = nil
+            //uncomment the line below if updating location is taking time to stop ie printing infinitely
+            //locationManager.delegate = nil
             
             print("Longitude: \(location.coordinate.longitude) Latitude: \(location.coordinate.latitude)")
-//sending data to the API
+            //sending data to the API
             let latitude = String(location.coordinate.latitude)
             let longitude = String(location.coordinate.longitude)
             
             let params: [String : String] = ["lat" : latitude, "lon" : longitude, "appid" : APP_ID]
             
-//calling alamofire function written in NETWORKING SECTION
+            //calling alamofire function written in NETWORKING SECTION
             getWeatherData(url: WEATHER_URL, parameters: params)
         }
     }
@@ -136,7 +145,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
-
+    
     
     //MARK: - Change City Delegate methods
     /***************************************************************/
@@ -144,7 +153,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Write the userEnteredANewCityName Delegate method here:
     
-
+    
     
     //Write the PrepareForSegue Method here
     
