@@ -58,6 +58,13 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             response in
             if response.result.isSuccess {
                 print("Success")
+                
+                //json data from API
+                let weatherJSON : JSON = JSON(response.result.value!)
+                
+                //parsing the JSON data
+                self.updateWeatherData(json: weatherJSON)
+                
             }else{
                 print("Error: \(String(describing: response.result.error))")
                 self.cityLabel.text = "Connection issues"
@@ -75,7 +82,9 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
    
     
     //Write the updateWeatherData method here:
-    
+    func updateWeatherData(json: JSON){
+        let tempResult = json["main"]["temp"]
+    }
 
     
     
@@ -99,7 +108,10 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[locations.count - 1]
         if location.horizontalAccuracy > 0{
-            locationManager.startUpdatingLocation()
+            locationManager.stopUpdatingLocation()
+//uncomment the line below if updating location is taking time to stop ie printing infinitely
+//locationManager.delegate = nil
+            
             print("Longitude: \(location.coordinate.longitude) Latitude: \(location.coordinate.latitude)")
 //sending data to the API
             let latitude = String(location.coordinate.latitude)
@@ -107,7 +119,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             
             let params: [String : String] = ["lat" : latitude, "lon" : longitude, "appid" : APP_ID]
             
-//using alamofire
+//calling alamofire function written in NETWORKING SECTION
             getWeatherData(url: WEATHER_URL, parameters: params)
         }
     }
