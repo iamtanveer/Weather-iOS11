@@ -41,7 +41,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
 //step 5 -> setup the Info.plist
         
 //step 6 -> start updating location
-// this is an ASYNCHRONOUS METHOD, RUNS IN THE BACKGROUND. WOULD FREEZE IF NOT.
+// this is an ASYNCHRONOUS METHOD, RUNS IN THE BACKGROUND. WOULD FREEZE IF NOT HAD BEEN ASYNC.
         locationManager.startUpdatingLocation()
 
         
@@ -52,7 +52,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     //MARK: - Networking
     /***************************************************************/
     
-    //Write the getWeatherData method here:
+    //getWeatherData method here:
     func getWeatherData(url: String, parameters: [String : String]){
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON {
             response in
@@ -81,9 +81,10 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     /***************************************************************/
    
     
-    //Write the updateWeatherData method here:
+    //updateWeatherData method here:
     func updateWeatherData(json: JSON){
         let tempResult = json["main"]["temp"]
+        print(tempResult)
     }
 
     
