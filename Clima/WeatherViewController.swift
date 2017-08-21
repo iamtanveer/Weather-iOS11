@@ -94,6 +94,9 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             weatherDataModel.condition = json["weather"][0]["id"].intValue
             
             weatherDataModel.weatherIconName = weatherDataModel.updateWeatherIcon(condition: weatherDataModel.condition)
+        
+            updateUIWithWeatherData()
+            
         }else{
             cityLabel.text = "Weather unavailable"
         }
@@ -106,7 +109,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     /***************************************************************/
     
     
-    //Write the updateUIWithWeatherData method here:
+    //updateUIWithWeatherData method here:
     func updateUIWithWeatherData(){
         cityLabel.text = weatherDataModel.city
         temperatureLabel.text = String(weatherDataModel.temperature)
