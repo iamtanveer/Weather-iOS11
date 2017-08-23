@@ -13,7 +13,7 @@ import SwiftyJSON
 //step 1 is to add this ^
 
 //step 2 is to add CLLocationManagerDelegate
-class WeatherViewController: UIViewController, CLLocationManagerDelegate {
+class WeatherViewController: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
     
     let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
     //    let APP_ID = "e72ca729af228beabd5d20e3b7749713"
@@ -158,12 +158,19 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     /***************************************************************/
     
     
-    //Write the userEnteredANewCityName Delegate method here:
+    //userEnteredANewCityName Delegate method here:
+    func userEnteredANewCityName(city: String) {
+        print(city)
+    }
     
     
-    
-    //Write the PrepareForSegue Method here
-    
+    //PrepareForSegue Method here
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "changeCityName"{
+            let destinationVC = segue.destination as! ChangeCityViewController
+            destinationVC.delegate = self
+        }
+    }
     
     
     
